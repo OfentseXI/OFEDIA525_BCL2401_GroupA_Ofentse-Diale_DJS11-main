@@ -22,7 +22,7 @@ const Sidebar = () => {
             <div className='p-4 flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
                     <img onClick={() => navigate ('/favorites')} className='w-8 cursor-pointer'src={assets.stack_icon} alt="" />
-                    <p className='font-semibold cursor-pointer'>Favorites</p> 
+                    <p onClick={() => navigate ('/favorites')} className='font-semibold cursor-pointer'>Favorites</p> 
                 </div>
                 <div className='flex items-center gap-3'>
                     <img onClick={() => navigate ('/favorites')} className= 'w-5 cursor-pointer' src={assets.arrow_icon} alt="" />
