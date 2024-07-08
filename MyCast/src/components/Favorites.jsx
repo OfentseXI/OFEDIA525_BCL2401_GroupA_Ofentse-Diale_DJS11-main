@@ -1,10 +1,11 @@
 import React from 'react'
+import Navbar from './Navbar'
 
 const Favorites = () => {
   return (
-    <div>
-      <h1 className='text-white'>'Hello World'</h1>  
-    </div>
+    <>
+      <Navbar /> 
+    </>
   )
 }
 
