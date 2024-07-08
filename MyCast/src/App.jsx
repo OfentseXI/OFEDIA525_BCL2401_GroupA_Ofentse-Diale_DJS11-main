@@ -4,6 +4,7 @@ import AudioPlayer from './components/AudioPlayer'
 import Display from './components/Display'
 import { AudioPlayerContext } from './context/AudioPlayerContext'
 
+
 const App = () => {
 
   const {audioRef,track} = useContext(AudioPlayerContext)
