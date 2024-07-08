@@ -3,7 +3,7 @@ import React from 'react'
 const Favorites = () => {
   return (
     <div>
-      'Hello World'
+      <h1 className='text-white'>'Hello World'</h1>  
     </div>
   )
 }
