@@ -19,6 +19,8 @@ const Navbar = () => {
       </div> 
       <div className='flex items-center gap-2 mt-4'>
         <p className='bg-black px-4 py-1 rounded-2xl cursor-pointer hover:bg-purple-500 hover:text-black font-semibold'>All Podcasts</p>
+        <button></button>
+        <button></button>
         <p className='bg-black px-4 py-1 rounded-2xl cursor-pointer hover:bg-purple-500 hover:text-black font-semibold'>A-Z</p>
         <p className='bg-black px-4 py-1 rounded-2xl cursor-pointer hover:bg-purple-500 hover:text-black font-semibold'>Z-A</p>
       </div>
