@@ -4,9 +4,10 @@ import Navbar from './Navbar'
 const Favorites = () => {
   return (
     <>
-      <Navbar /> 
+      <Navbar />
     </>
   )
 }
 
-export default Favorites;
+export default Favorites
+
