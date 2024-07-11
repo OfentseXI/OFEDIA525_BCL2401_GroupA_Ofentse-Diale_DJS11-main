@@ -9,49 +9,18 @@ const AlbumItem = () => {
   const [series, setSeries] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [album, setAlbum] = useState([]);
 
   useEffect(() => {
-    const fetchSeries = async () => {
-      try {
-        const response = await fetch(
-          `https://podcast-api.netlify.app/id/${id}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log(data); // Log the fetched data to verify its structure
-        setSeries(data);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
+    fetch('https://podcast-api.netlify.app')
+    .then(response => response.json())
+    .then(data => setAlbum( data))
+    .catch(err => console.log(error))
+  }, [])
 
-    fetchSeries();
-  }, [id]);
-
- 
-  const handleSeasonClick = (showid) => {
-    navigate(`/season/${showid}/episodes`);
-  };
-  
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  const todayDate = new Date().toLocaleDateString();
-
-  return (
-    <div className="p-4 w-full text-white">
-      <h2 className="text-2xl font-bold mb-4">{series.title}</h2>
+return (
+   <div className="p-4 w-full text-white">
+      <h2 className="text-2xl font-bold mb-4">${data.title}</h2>
       <img
         src={series.image}
         alt={series.title}
@@ -84,7 +53,39 @@ const AlbumItem = () => {
         ))}
       </div>
     </div>
-  );
+)
+  /*fetch().then((data)=>{
+    // console.log(data)
+    return data.json();
+  }).then((completedata)=>{
+      //console.log(completedata[2].title);
+      let data1="";
+     completedata.map((values)=>{
+         data1+=
+     
+     })
+ }).catch((error)=>{
+    return <div>Error: {error.message}</div>;
+ })
+
+ 
+  /*const handleSeasonClick = (showid) => {
+    navigate(`/season/${showid}/episodes`);
+  };
+  
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const todayDate = new Date().toLocaleDateString();
+
+  return (
+    */
 };
 
 export default AlbumItem;
