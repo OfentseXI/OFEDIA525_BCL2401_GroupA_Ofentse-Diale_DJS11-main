@@ -10,14 +10,16 @@ const AlbumItem = () => {
   const [album, setAlbum] = useState({});
 
   useEffect(() => {
-    fetch('https://podcast-api.netlify.app/')
-      .then(response => response.json())
-      .then(data => {
+    console.log(`Fetching data for ID: ${id}`);
+    fetch(`https://podcast-api.netlify.app/${id}`)
+     .then(response => response.json())
+     .then(data => {
+        console.log(`API response:`, data);
         setAlbum(data);
         setSeries(data.series);
         setLoading(false);
       })
-      .catch(err => {
+     .catch(err => {
         console.error(err);
         setError(err);
         setLoading(false);
