@@ -46,7 +46,7 @@ const PodcastList = () => {
   return (
     <div className="p-4 w-full">
       <Navbar onSort={handleSort} />
-      <h2 className="text-2xl font-bold mb-4">Podcasts you might like...</h2>
+      <h2 className="text-2xl font-bold my-4">Featured Casts</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {loading ? (
           <div>Loading...</div>
