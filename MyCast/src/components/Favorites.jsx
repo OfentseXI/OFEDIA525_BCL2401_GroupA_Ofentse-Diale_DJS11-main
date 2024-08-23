@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import { AiOutlineClose } from "react-icons/ai";
 
 const Favorites = () => {
   const [favoritePodcasts, setFavoritePodcasts] = useState([]);
@@ -12,25 +13,34 @@ const Favorites = () => {
     const allPodcasts = JSON.parse(localStorage.getItem("allPodcasts")) || [];
     const savedLikedEpisodes = JSON.parse(localStorage.getItem("likedEpisodes")) || [];
 
-    // Filter podcasts that are in the favorites
     const favoritePodcasts = allPodcasts.filter((podcast) =>
       savedFavorites.includes(podcast.id)
     );
     setFavoritePodcasts(favoritePodcasts);
-
-    // Set favorite episodes
     setFavoriteEpisodes(savedLikedEpisodes);
   }, []);
 
   const handlePodcastClick = (id) => {
-    navigate(`/series/${id}`); // Navigate to the SeriesDetail page with the podcast id
+    navigate(`/series/${id}`);
+  };
+
+  const handleRemovePodcast = (id) => {
+    const updatedFavorites = favoritePodcasts.filter((podcast) => podcast.id !== id);
+    setFavoritePodcasts(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites.map((podcast) => podcast.id)));
+  };
+
+  const handleRemoveEpisode = (id) => {
+    const updatedLikedEpisodes = favoriteEpisodes.filter((episode) => episode.id !== id);
+    setFavoriteEpisodes(updatedLikedEpisodes);
+    localStorage.setItem("likedEpisodes", JSON.stringify(updatedLikedEpisodes));
   };
 
   const clearFavorites = () => {
     localStorage.removeItem("favorites");
     localStorage.removeItem("likedEpisodes");
-    setFavoritePodcasts([]); // Clear the state as well
-    setFavoriteEpisodes([]); // Clear the episodes
+    setFavoritePodcasts([]);
+    setFavoriteEpisodes([]);
   };
 
   const handleSort = (order) => {
@@ -63,7 +73,7 @@ const Favorites = () => {
           favoritePodcasts.map((podcast) => (
             <div
               key={podcast.id}
-              className="bg-white text-black rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="bg-white text-black rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer relative group hover:scale-105 transition-transform duration-300"
               onClick={() => handlePodcastClick(podcast.id)}
             >
               <img
@@ -78,6 +88,12 @@ const Favorites = () => {
               <p className="text-sm text-gray-700 text-center">
                 Seasons: {podcast.seasons}
               </p>
+              <button
+                onClick={(e) => {e.stopPropagation(); handleRemovePodcast(podcast.id);}}
+                className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <AiOutlineClose className="text-xl"/>
+              </button>
             </div>
           ))
         ) : (
@@ -101,7 +117,7 @@ const Favorites = () => {
           favoriteEpisodes.map((episode) => (
             <div
               key={episode.id}
-              className="bg-white text-black rounded-lg shadow-md p-4"
+              className="bg-white text-black rounded-lg shadow-md p-4 relative group"
             >
               <h3 className="text-lg font-bold">{episode.title}</h3>
               <p className="text-sm text-gray-700 mb-2">
@@ -111,6 +127,12 @@ const Favorites = () => {
               <p className="text-xs text-gray-500 mt-2">
                 Season {episode.season}, Podcast ID: {episode.podcastId}
               </p>
+              <button
+                onClick={() => handleRemoveEpisode(episode.id)}
+                className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <AiOutlineClose className="text-xl"/>
+              </button>
             </div>
           ))
         ) : (
