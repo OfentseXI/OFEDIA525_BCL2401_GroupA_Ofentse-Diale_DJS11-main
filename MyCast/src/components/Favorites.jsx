@@ -14,9 +14,24 @@ const Favorites = () => {
     setFavoritePodcasts(favoritePodcasts);
   }, []);
 
+  const clearFavorites = () => {
+    localStorage.removeItem("favorites");
+    setFavoritePodcasts([]); // Clear the state as well
+  };
+
   return (
     <div className="p-4 w-full">
-      <h2 className="text-2xl font-bold my-4">My Favorite Podcasts</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">My Favorite Podcasts</h2>
+        {favoritePodcasts.length > 0 && (
+          <button
+            onClick={clearFavorites}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+          >
+            Clear Favorites
+          </button>
+        )}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {favoritePodcasts.length > 0 ? (
           favoritePodcasts.map((podcast) => (
