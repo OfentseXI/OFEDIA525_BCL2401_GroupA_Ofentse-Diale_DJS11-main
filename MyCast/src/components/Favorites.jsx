@@ -4,10 +4,12 @@ import Navbar from "./Navbar";
 import { AiOutlineClose } from "react-icons/ai";
 
 const Favorites = () => {
+  // State variables
   const [favoritePodcasts, setFavoritePodcasts] = useState([]);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch favorite podcasts and episodes from localStorage on component mount
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     const allPodcasts = JSON.parse(localStorage.getItem("allPodcasts")) || [];
@@ -20,22 +22,26 @@ const Favorites = () => {
     setFavoriteEpisodes(savedLikedEpisodes);
   }, []);
 
+  // Navigate to series detail page when a podcast is clicked
   const handlePodcastClick = (id) => {
     navigate(`/series/${id}`);
   };
 
+  // Remove a podcast from favorites
   const handleRemovePodcast = (id) => {
     const updatedFavorites = favoritePodcasts.filter((podcast) => podcast.id !== id);
     setFavoritePodcasts(updatedFavorites);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites.map((podcast) => podcast.id)));
   };
 
+  // Remove an episode from favorites
   const handleRemoveEpisode = (id) => {
     const updatedLikedEpisodes = favoriteEpisodes.filter((episode) => episode.id !== id);
     setFavoriteEpisodes(updatedLikedEpisodes);
     localStorage.setItem("likedEpisodes", JSON.stringify(updatedLikedEpisodes));
   };
 
+  // Clear all favorites
   const clearFavorites = () => {
     localStorage.removeItem("favorites");
     localStorage.removeItem("likedEpisodes");
@@ -43,6 +49,7 @@ const Favorites = () => {
     setFavoriteEpisodes([]);
   };
 
+  // Sort favorites by title or update time
   const handleSort = (order, type = "title") => {
     const sortByTitle = (a, b) => {
       if (order === "asc") {
@@ -74,6 +81,7 @@ const Favorites = () => {
   return (
     <div className="p-4 w-full">
       <Navbar onSort={handleSort} />
+      {/* Favorite Podcasts Section */}
       <div className="flex justify-between items-center my-4">
         <h2 className="text-2xl font-bold">My Favorite Podcasts</h2>
         {favoritePodcasts.length > 0 && (
@@ -105,6 +113,7 @@ const Favorites = () => {
               <p className="text-sm text-gray-700 text-center">
                 Seasons: {podcast.seasons}
               </p>
+              {/* Remove podcast button */}
               <button
                 onClick={(e) => { e.stopPropagation(); handleRemovePodcast(podcast.id); }}
                 className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -118,6 +127,7 @@ const Favorites = () => {
         )}
       </div>
 
+      {/* Favorite Episodes Section */}
       <div className="flex justify-between items-center my-4">
         <h2 className="text-2xl font-bold">My Favorite Episodes</h2>
         {favoriteEpisodes.length > 0 && (
@@ -144,6 +154,7 @@ const Favorites = () => {
               <p className="text-xs text-gray-500 mt-2">
                 Season {episode.season}, Podcast ID: {episode.podcastId}
               </p>
+              {/* Remove episode button */}
               <button
                 onClick={() => handleRemoveEpisode(episode.id)}
                 className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"

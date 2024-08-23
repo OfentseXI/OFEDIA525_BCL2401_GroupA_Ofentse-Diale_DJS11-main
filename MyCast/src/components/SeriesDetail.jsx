@@ -4,11 +4,15 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import Navbar from './Navbar';
 
 const SeriesDetail = () => {
+  // Extract the id parameter from the URL
   const { id } = useParams();
+  
+  // State variables
   const [podcast, setPodcast] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSeason, setSelectedSeason] = useState(0);
   const [likedEpisodes, setLikedEpisodes] = useState(() => {
+    // Initialize liked episodes from localStorage
     return JSON.parse(localStorage.getItem('likedEpisodes')) || [];
   });
   const [seasonEpisodesCount, setSeasonEpisodesCount] = useState([]);
@@ -17,6 +21,7 @@ const SeriesDetail = () => {
     const fetchPodcast = async () => {
       try {
         setIsLoading(true);
+        // Fetch podcast data from the API
         const response = await fetch(`https://podcast-api.netlify.app/id/${id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -39,10 +44,12 @@ const SeriesDetail = () => {
     fetchPodcast();
   }, [id]);
 
+  // Handle season change in dropdown
   const handleSeasonChange = (event) => {
     setSelectedSeason(Number(event.target.value));
   };
 
+  // Handle liking/unliking an episode
   const handleLikeEpisode = (episode, index) => {
     setLikedEpisodes((prevLikedEpisodes) => {
       const episodeWithId = {
@@ -62,10 +69,12 @@ const SeriesDetail = () => {
     });
   };
 
+  // Update localStorage when likedEpisodes changes
   useEffect(() => {
     localStorage.setItem('likedEpisodes', JSON.stringify(likedEpisodes));
   }, [likedEpisodes]);
 
+  // Show loading spinner while fetching data
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -74,19 +83,23 @@ const SeriesDetail = () => {
     );
   }
 
+  // Show message if no podcast data is found
   if (!podcast) {
     return <div>No podcast found.</div>;
   }
 
+  // Render the podcast details
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <Navbar />
       <h1 className="text-4xl font-bold my-6 text-gray-400">{podcast.title}</h1>
       
+      {/* Podcast image and description */}
       <div className="flex flex-col md:flex-row mb-8">
         <img src={podcast.image} alt="Podcast cover" className="h-48 w-48 md:h-64 md:w-64 object-cover mr-0 md:mr-8 mb-4 md:mb-0 rounded-lg border border-gray-300" />
         <div className="flex-1">
           <p className="mb-6 text-gray-300">{podcast.description}</p>
+          {/* Display genres if available */}
           {podcast.genres && podcast.genres.length > 0 && (
             <div className="mb-6">
               <h3 className="text-xl font-semibold text-white">Genres:</h3>
@@ -98,6 +111,7 @@ const SeriesDetail = () => {
         </div>
       </div>
       
+      {/* Season selection dropdown */}
       {podcast.seasons && podcast.seasons.length > 0 && (
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-gray-300 mb-2">Seasons: {podcast.seasons.length}</h3>
@@ -120,6 +134,7 @@ const SeriesDetail = () => {
         </div>
       )}
 
+      {/* Episode list */}
       {podcast.seasons && podcast.seasons.length > 0 && (
         <div>
           <ul className="space-y-4">
@@ -130,6 +145,7 @@ const SeriesDetail = () => {
                   <p className="text-gray-700 mb-2">{episode.description}</p>
                   <audio controls src={episode.file} className="w-full"></audio>
                 </div>
+                {/* Like/Unlike button */}
                 <button
                   onClick={() => handleLikeEpisode(episode, index)}
                   className="ml-4 p-2"
