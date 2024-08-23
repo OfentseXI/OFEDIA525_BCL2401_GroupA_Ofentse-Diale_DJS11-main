@@ -86,6 +86,9 @@ const PodcastList = () => {
               <p className="text-sm text-gray-700 text-center">
                 Seasons: {podcast.seasons}
               </p>
+              <p className="text-sm text-gray-700 text-center">
+                Genre: {podcast.genre}
+              </p>
               <button
                 onClick={(e) => {
                   e.stopPropagation();

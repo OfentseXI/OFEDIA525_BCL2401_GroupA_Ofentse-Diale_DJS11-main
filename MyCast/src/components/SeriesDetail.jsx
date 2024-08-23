@@ -1,11 +1,9 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 
 const SeriesDetail = () => {
   const { id } = useParams();
-
   const navigate = useNavigate();
   const [series, setSeries] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +21,6 @@ const SeriesDetail = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(data); // Log the fetched data to verify its structure
         setSeries(data);
         setLoading(false);
       } catch (error) {
@@ -46,7 +43,6 @@ const SeriesDetail = () => {
   const handleSeasonClick = (showid) => {
     navigate(`/season/${showid}/episodes`);
   };
-  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -68,7 +64,7 @@ const SeriesDetail = () => {
       />
       <p className="text-lg mb-4">{series.description}</p>
       <p className="text-sm mb-2">Last updated: {todayDate}</p>
-      <p className="text-sm mb-4">Genre: {series.genre}</p>
+      <p className="text-sm mb-4">Genre: {series.genres}</p> 
       <div className="flex items-center">
         <button onClick={handleFavoriteClick} className="text-2xl">
           <FaHeart className={isFavorite ? "text-red-500" : "text-gray-500"} />
@@ -85,7 +81,7 @@ const SeriesDetail = () => {
           <div
             key={season.id}
             className="bg-white rounded-md shadow-md overflow-hidden cursor-pointer"
-            onClick={() => handleSeasonClick(season.id)} // Pass season.id to handleSeasonClick
+            onClick={() => handleSeasonClick(season.id)}
           >
             <img
               src={season.image}
@@ -96,6 +92,9 @@ const SeriesDetail = () => {
               <h3 className="text-xl font-bold mb-2 text-black">
                 {season.title}
               </h3>
+              <p className="text-sm text-gray-700">
+                Episodes: {season.episodes.length}
+              </p>
               <p className="text-sm text-gray-700">{season.description}</p>
             </div>
           </div>
