@@ -11,8 +11,8 @@ const AlbumItem = ({ name, desc, id, image }) => {
 
 
   useEffect(() => {
-    console.log(`Fetching data for ID: ${id}`);
-    fetch(`https://podcast-api.netlify.app/`)
+    console.log(`Fetching data for ID: ${series}`);
+    fetch(`https://podcast-api.netlify.app/series`)
      .then(response => response.json())
      .then(data => {
         console.log(`API response:`, data);
