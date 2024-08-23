@@ -98,7 +98,7 @@ const SeriesDetail = () => {
       
       {podcast.seasons && podcast.seasons.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Seasons</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">Seasons: {podcast.seasons.length}</h3>
           <div className="flex items-center">
             <select
               value={selectedSeason}
