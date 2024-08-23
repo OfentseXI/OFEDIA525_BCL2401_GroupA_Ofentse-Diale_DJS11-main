@@ -10,3 +10,14 @@ const genres = [
     { id: 8, name: 'News' },
     { id: 9, name: 'Kids and Family' },
   ];
+
+  export const getGenreNameById = (genreIds) => {
+    if (!genreIds || genreIds.length === 0) {
+      return [];
+    }
+  
+    return genreIds.map(id => {
+      const genre = genres.find(genre => genre.id === id);
+      return genre ? genre.name : '';
+    }).filter(Boolean); // Filter out any empty strings
+  };
