@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Favorites = () => {
   const [favoritePodcasts, setFavoritePodcasts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -13,6 +15,10 @@ const Favorites = () => {
     );
     setFavoritePodcasts(favoritePodcasts);
   }, []);
+
+  const handlePodcastClick = (id) => {
+    navigate(`/series/${id}`); // Navigate to the SeriesDetail page with the podcast id
+  };
 
   const clearFavorites = () => {
     localStorage.removeItem("favorites");
@@ -37,7 +43,8 @@ const Favorites = () => {
           favoritePodcasts.map((podcast) => (
             <div
               key={podcast.id}
-              className="bg-white text-black rounded-lg shadow-md p-4 flex flex-col items-center"
+              className="bg-white text-black rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+              onClick={() => handlePodcastClick(podcast.id)}
             >
               <img
                 src={podcast.image}

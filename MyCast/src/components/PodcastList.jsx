@@ -35,7 +35,7 @@ const PodcastList = () => {
   const navigate = useNavigate();
 
   const handlePodcastClick = (id) => {
-    navigate(`/podcast/${id}`); // Navigate to the podcast detail page
+    navigate(`/series/${id}`); // Navigate to the SeriesDetail page with the podcast id
   };
 
   const handleSort = (order) => {
