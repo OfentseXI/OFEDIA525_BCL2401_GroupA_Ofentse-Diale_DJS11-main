@@ -1,8 +1,10 @@
-# Podcast App
+# myCast Podcast App
 
-This is a Podcast App that allows users to browse podcast series, view detailed information about each series, and explore episodes within each season of a series. Users can also add series to their favorites.
+Discover your new favorite podcast with my intuitive app!
 
-Here's the link to my deployed app: [Podcast App](https://ikanyengadams-podcast-app.netlify.app/podcasts)
+Browse through a vast library of podcast series, dive into detailed show information, and explore episodes within each season. Plus, add your favorite series to your personalized list for easy access.
+
+Here's the link to my deployed app: []
 
 ## Features
 
@@ -17,7 +19,7 @@ Here's the link to my deployed app: [Podcast App](https://ikanyengadams-podcast-
 - React Router
 - Fetch API
 - Tailwind CSS
-- FontAwesome Icons
+- React-Icons
 
 ## Getting Started
 
@@ -33,13 +35,13 @@ Make sure you have the following installed on your local machine:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/podcast-app.git
+    git clone https://github.com/OfentseXI/OFEDIA525_BCL2401_GroupA_Ofentse-Diale_DJS11-main.git
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd podcast-app
+    cd myCast
     ```
 
 3. Install the dependencies:
@@ -61,6 +63,3 @@ Start the development server:
 ```bash
 npm start
 
-# Contact 
-
-You can contact me on [LinkedIn](https://www.linkedin.com/in/ikanyengadams/) or email me @ikanyengadams2@gmail.com.
