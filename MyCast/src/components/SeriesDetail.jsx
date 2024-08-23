@@ -81,16 +81,16 @@ const SeriesDetail = () => {
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <Navbar />
-      <h1 className="text-4xl font-bold mb-6 text-gray-900">{podcast.title}</h1>
+      <h1 className="text-4xl font-bold my-6 text-gray-400">{podcast.title}</h1>
       
       <div className="flex flex-col md:flex-row mb-8">
         <img src={podcast.image} alt="Podcast cover" className="h-48 w-48 md:h-64 md:w-64 object-cover mr-0 md:mr-8 mb-4 md:mb-0 rounded-lg border border-gray-300" />
         <div className="flex-1">
-          <p className="mb-6 text-gray-700">{podcast.description}</p>
+          <p className="mb-6 text-gray-300">{podcast.description}</p>
           {podcast.genres && podcast.genres.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">Genres</h3>
-              <div className="text-gray-600">
+              <h3 className="text-xl font-semibold text-white">Genres:</h3>
+              <div className="text-gray-300">
                 {podcast.genres.filter(genre => genre.toLowerCase() !== 'all').join(', ')}
               </div>
             </div>
@@ -100,7 +100,7 @@ const SeriesDetail = () => {
       
       {podcast.seasons && podcast.seasons.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Seasons: {podcast.seasons.length}</h3>
+          <h3 className="text-xl font-semibold text-gray-300 mb-2">Seasons: {podcast.seasons.length}</h3>
           <div className="flex items-center">
             <select
               value={selectedSeason}
@@ -124,7 +124,7 @@ const SeriesDetail = () => {
         <div>
           <ul className="space-y-4">
             {podcast.seasons[selectedSeason].episodes.map((episode, index) => (
-              <li key={`${id}-${selectedSeason}-${index}`} className="bg-white p-4 rounded-lg shadow-lg flex justify-between items-center transition-shadow duration-200 hover:shadow-xl">
+              <li key={`${id}-${selectedSeason}-${index}`} className="bg-white text-black p-4 rounded-lg shadow-lg flex justify-between items-center transition-shadow duration-200 hover:shadow-xl">
                 <div className="flex flex-col flex-grow mr-4">
                   <div className="font-bold text-gray-900">{episode.title}</div>
                   <p className="text-gray-700 mb-2">{episode.description}</p>

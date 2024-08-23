@@ -19,12 +19,12 @@ const Sidebar = () => {
           sidebarVisible ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 lg:transform-none lg:relative lg:translate-x-0 lg:w-[25%] lg:flex`}
       >
-        <div className="bg-[#121212] h-[100%] rounded flex flex-col items-start">
+        <div className="bg-[#121212] h-[100%] rounded flex flex-col gap-4 pt-4">
           <div
             className="flex items-center gap-3 pl-4 py-2 hover:bg-[#333] rounded-md cursor-pointer transition-colors duration-200"
             onClick={() => handleNavigation("/")}
           >
-            <img className="w-6" src="/public/myCast.png" alt="Home" />
+            <img className="w-6" src="/myCast.png" alt="Home" />
             <p className="font-bold">MyCast</p>
           </div>
           <div
