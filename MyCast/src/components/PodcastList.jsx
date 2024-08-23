@@ -4,6 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import Navbar from "./Navbar";
 
 const PodcastList = () => {
+  const [ setGenres ] = useState({})
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,6 +32,32 @@ const PodcastList = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const genreIds = [...new Set(podcasts.map((podcast) => podcast.genre_id))];
+        const genreFetchPromises = genreIds.map(async (id) => {
+          const response = await fetch(`https://podcast-api.netlify.app/genre/${id}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch genre for id ${id}`);
+          }
+          const data = await response.json();
+          return { id, name: data.genre }; // Assuming data.genre contains the genre name
+        });
+        const fetchedGenres = await Promise.all(genreFetchPromises);
+        const genresMap = fetchedGenres.reduce((acc, genre) => {
+          acc[genre.id] = genre.name;
+          return acc;
+        }, {});
+        setGenres(genresMap);
+      } catch (error) {
+        console.error('Error fetching genres:', error);
+      }
+    };
+    fetchGenres();
+  },);
+
 
   const navigate = useNavigate();
 
