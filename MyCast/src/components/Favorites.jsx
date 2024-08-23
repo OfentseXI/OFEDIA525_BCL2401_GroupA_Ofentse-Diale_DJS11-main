@@ -44,19 +44,24 @@ const Favorites = () => {
   };
 
   const handleSort = (order) => {
-    const sortedPodcasts = [...favoritePodcasts].sort((a, b) => {
+    const sortByTitle = (a, b) => {
       if (order === "asc") {
         return a.title.localeCompare(b.title);
       } else {
         return b.title.localeCompare(a.title);
       }
-    });
+    };
+
+    const sortedPodcasts = [...favoritePodcasts].sort(sortByTitle);
+    const sortedEpisodes = [...favoriteEpisodes].sort(sortByTitle);
+
     setFavoritePodcasts(sortedPodcasts);
+    setFavoriteEpisodes(sortedEpisodes);
   };
 
   return (
     <div className="p-4 w-full">
-      <Navbar onSort={handleSort}/>
+      <Navbar onSort={handleSort} />
       <div className="flex justify-between items-center my-4">
         <h2 className="text-2xl font-bold">My Favorite Podcasts</h2>
         {favoritePodcasts.length > 0 && (
@@ -92,7 +97,7 @@ const Favorites = () => {
                 onClick={(e) => {e.stopPropagation(); handleRemovePodcast(podcast.id);}}
                 className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               >
-                <AiOutlineClose className="text-xl"/>
+                <AiOutlineClose className="text-xl" />
               </button>
             </div>
           ))
@@ -131,7 +136,7 @@ const Favorites = () => {
                 onClick={() => handleRemoveEpisode(episode.id)}
                 className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               >
-                <AiOutlineClose className="text-xl"/>
+                <AiOutlineClose className="text-xl" />
               </button>
             </div>
           ))
