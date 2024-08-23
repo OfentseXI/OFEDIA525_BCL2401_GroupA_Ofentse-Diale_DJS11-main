@@ -43,7 +43,7 @@ const Favorites = () => {
     setFavoriteEpisodes([]);
   };
 
-  const handleSort = (order) => {
+  const handleSort = (order, type = "title") => {
     const sortByTitle = (a, b) => {
       if (order === "asc") {
         return a.title.localeCompare(b.title);
@@ -52,8 +52,20 @@ const Favorites = () => {
       }
     };
 
-    const sortedPodcasts = [...favoritePodcasts].sort(sortByTitle);
-    const sortedEpisodes = [...favoriteEpisodes].sort(sortByTitle);
+    const sortByUpdateTime = (a, b) => {
+      const dateA = new Date(a.updated);
+      const dateB = new Date(b.updated);
+      if (order === "asc") {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
+    };
+
+    const sortFunction = type === "title" ? sortByTitle : sortByUpdateTime;
+
+    const sortedPodcasts = [...favoritePodcasts].sort(sortFunction);
+    const sortedEpisodes = [...favoriteEpisodes].sort(sortFunction);
 
     setFavoritePodcasts(sortedPodcasts);
     setFavoriteEpisodes(sortedEpisodes);
@@ -94,7 +106,7 @@ const Favorites = () => {
                 Seasons: {podcast.seasons}
               </p>
               <button
-                onClick={(e) => {e.stopPropagation(); handleRemovePodcast(podcast.id);}}
+                onClick={(e) => { e.stopPropagation(); handleRemovePodcast(podcast.id); }}
                 className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md text-red-600 hover:bg-red-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               >
                 <AiOutlineClose className="text-xl" />

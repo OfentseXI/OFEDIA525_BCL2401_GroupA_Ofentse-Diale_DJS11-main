@@ -23,6 +23,10 @@ const Navbar = ({ onSort }) => {
           onClick={() => onSort("asc")}>A-Z</p>
         <p className='bg-black px-4 py-1 rounded-2xl cursor-pointer hover:bg-purple-500 hover:text-black font-semibold'
           onClick={() => onSort("desc")}>Z-A</p>
+          <p className='bg-black px-4 py-1 rounded-2xl cursor-pointer hover:bg-purple-500 hover:text-black font-semibold'
+          onClick={() => onSort("latest")}>Latest</p>
+        <p className='bg-black px-4 py-1 rounded-2xl cursor-pointer hover:bg-purple-500 hover:text-black font-semibold'
+          onClick={() => onSort("oldest")}>Oldest</p>
       </div>
     </>
   )
