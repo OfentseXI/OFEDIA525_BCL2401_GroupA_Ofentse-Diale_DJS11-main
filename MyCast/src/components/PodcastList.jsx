@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
 import Navbar from "./Navbar";
 
 const PodcastList = () => {
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState(() => {
+    // Load favorites from localStorage on initial render
+    const savedFavorites = localStorage.getItem("favorites");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
 
   useEffect(() => {
     fetch("https://podcast-api.netlify.app/")
@@ -43,6 +49,15 @@ const PodcastList = () => {
     setPodcasts(sortedPodcasts);
   };
 
+  const handleFavoriteClick = (podcast) => {
+    const updatedFavorites = favorites.includes(podcast.id)
+      ? favorites.filter((id) => id !== podcast.id)
+      : [...favorites, podcast.id];
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
   return (
     <div className="p-4 w-full">
       <Navbar onSort={handleSort} />
@@ -71,6 +86,21 @@ const PodcastList = () => {
               <p className="text-sm text-gray-700 text-center">
                 Seasons: {podcast.seasons}
               </p>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent navigation when clicking the button
+                  handleFavoriteClick(podcast);
+                }}
+                className="text-2xl mt-2"
+              >
+                <FaHeart
+                  className={
+                    favorites.includes(podcast.id)
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }
+                />
+              </button>
             </div>
           ))
         )}
