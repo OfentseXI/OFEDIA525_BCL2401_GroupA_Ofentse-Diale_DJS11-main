@@ -55,6 +55,10 @@ Make sure you have the following installed on your local machine:
     ```bash
     yarn install
     ```
+## Credits
+
+Credit to GreatStack for the spotify layout tutorial
+Link to tutorial video: https://youtu.be/amFYvQK4huo?si=z2_uccOirQVCQp_9
 
 ### Running the App
 
