@@ -1,106 +1,148 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
-import { getGenreNameById } from "./Genres";
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 const SeriesDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const [series, setSeries] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
+  const [podcast, setPodcast] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedSeason, setSelectedSeason] = useState(0);
+  const [likedEpisodes, setLikedEpisodes] = useState(() => {
+    return JSON.parse(localStorage.getItem('likedEpisodes')) || [];
+  });
+  const [seasonEpisodesCount, setSeasonEpisodesCount] = useState([]);
 
   useEffect(() => {
-    const fetchSeries = async () => {
+    const fetchPodcast = async () => {
       try {
-        const response = await fetch(
-          `https://podcast-api.netlify.app/id/${id}`
-        );
+        setIsLoading(true);
+        const response = await fetch(`https://podcast-api.netlify.app/id/${id}`);
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setSeries(data);
-        setLoading(false);
+        setPodcast(data);
+        console.log('Podcast Data:', data);
+
+        // Calculate episode counts for each season
+        const episodeCounts = data.seasons.map(season => season.episodes.length);
+        setSeasonEpisodesCount(episodeCounts);
+
       } catch (error) {
-        setError(error);
-        setLoading(false);
+        console.error('Error fetching podcast:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchSeries();
+    fetchPodcast();
   }, [id]);
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
-    setShowMessage(true);
-    setTimeout(() => {
-      setShowMessage(false);
-    }, 2000);
+  const handleSeasonChange = (event) => {
+    setSelectedSeason(Number(event.target.value));
   };
 
-  const handleSeasonClick = (showid) => {
-    navigate(`/season/${showid}/episodes`);
+  const handleLikeEpisode = (episode, index) => {
+    setLikedEpisodes((prevLikedEpisodes) => {
+      const episodeWithId = {
+        ...episode,
+        id: `${id}-${selectedSeason}-${index}`,
+        podcastId: id,
+        season: selectedSeason + 1
+      };
+      
+      const isLiked = prevLikedEpisodes.some(ep => ep.id === episodeWithId.id);
+      const updatedLikedEpisodes = isLiked
+        ? prevLikedEpisodes.filter(ep => ep.id !== episodeWithId.id)
+        : [...prevLikedEpisodes, episodeWithId];
+      
+      localStorage.setItem('likedEpisodes', JSON.stringify(updatedLikedEpisodes));
+      return updatedLikedEpisodes;
+    });
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    console.log('Updated Liked Episodes:', likedEpisodes);
+  }, [likedEpisodes]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (!podcast) {
+    return <div>No podcast found.</div>;
   }
-
-  const todayDate = new Date().toLocaleDateString();
 
   return (
-    <div className="p-4 w-full text-white">
-      <h2 className="text-2xl font-bold mb-4">{series.title}</h2>
-      <img
-        src={series.image}
-        alt={series.title}
-        className="w-45 h-80 rounded-md mb-2"
-      />
-      <p className="text-lg mb-4">{series.description}</p>
-      <p className="text-sm mb-2">Last updated: {todayDate}</p>
-      <p className="text-sm mb-4">Genre: {getGenreNameById(series.genres).join(', ')}</p> 
-      <div className="flex items-center">
-        <button onClick={handleFavoriteClick} className="text-2xl">
-          <FaHeart className={isFavorite ? "text-red-500" : "text-gray-500"} />
-        </button>
-        {showMessage && (
-          <div className="ml-2 p-2 bg-green-500 text-white rounded-md">
-            Added to favorites
-          </div>
-        )}
-      </div>
-
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {series.seasons.map((season) => (
-          <div
-            key={season.id}
-            className="bg-white rounded-md shadow-md overflow-hidden cursor-pointer"
-            onClick={() => handleSeasonClick(season.id)}
-          >
-            <img
-              src={season.image}
-              alt={season.title}
-              className="w-full h-60 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="text-xl font-bold mb-2 text-black">
-                {season.title}
-              </h3>
-              <p className="text-sm text-gray-700">
-                Episodes: {season.episodes.length}
-              </p>
-              <p className="text-sm text-gray-700">{season.description}</p>
+    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-4xl font-bold mb-6 text-gray-900">{podcast.title}</h1>
+      
+      <div className="flex flex-col md:flex-row mb-8">
+        <img src={podcast.image} alt="Podcast cover" className="h-48 w-48 md:h-64 md:w-64 object-cover mr-0 md:mr-8 mb-4 md:mb-0 rounded-lg border border-gray-300" />
+        <div className="flex-1">
+          <p className="mb-6 text-gray-700">{podcast.description}</p>
+          {podcast.genres && podcast.genres.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-gray-800">Genres</h3>
+              <div className="text-gray-600">
+                {podcast.genres.filter(genre => genre.toLowerCase() !== 'all').join(', ')}
+              </div>
             </div>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
+      
+      {podcast.seasons && podcast.seasons.length > 0 && (
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">Seasons</h3>
+          <div className="flex items-center">
+            <select
+              value={selectedSeason}
+              onChange={handleSeasonChange}
+              className="border border-gray-300 rounded p-2"
+            >
+              {podcast.seasons.map((season, index) => (
+                <option key={index} value={index}>
+                  Season {index + 1}
+                </option>
+              ))}
+            </select>
+            <span className="ml-4 text-gray-600">
+              Episodes: {seasonEpisodesCount[selectedSeason]}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {podcast.seasons && podcast.seasons.length > 0 && (
+        <div>
+          <ul className="space-y-4">
+            {podcast.seasons[selectedSeason].episodes.map((episode, index) => (
+              <li key={`${id}-${selectedSeason}-${index}`} className="bg-white p-4 rounded-lg shadow-lg flex justify-between items-center transition-shadow duration-200 hover:shadow-xl">
+                <div className="flex flex-col flex-grow mr-4">
+                  <div className="font-bold text-gray-900">{episode.title}</div>
+                  <p className="text-gray-700 mb-2">{episode.description}</p>
+                  <audio controls src={episode.file} className="w-full"></audio>
+                </div>
+                <button
+                  onClick={() => handleLikeEpisode(episode, index)}
+                  className="ml-4 p-2"
+                >
+                  {likedEpisodes.some(ep => ep.id === `${id}-${selectedSeason}-${index}`) ? (
+                    <AiFillHeart className="text-red-600 text-2xl" />
+                  ) : (
+                    <AiOutlineHeart className="text-gray-600 text-2xl" />
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
