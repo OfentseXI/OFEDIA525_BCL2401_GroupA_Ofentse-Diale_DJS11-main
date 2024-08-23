@@ -8,7 +8,6 @@ const PodcastList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState(() => {
-    // Load favorites from localStorage on initial render
     const savedFavorites = localStorage.getItem("favorites");
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
@@ -24,6 +23,7 @@ const PodcastList = () => {
       .then((data) => {
         const sortedData = data.sort((a, b) => a.title.localeCompare(b.title));
         setPodcasts(sortedData);
+        localStorage.setItem("allPodcasts", JSON.stringify(sortedData)); // Save all podcasts to localStorage
         setLoading(false);
       })
       .catch((error) => {
@@ -34,8 +34,8 @@ const PodcastList = () => {
 
   const navigate = useNavigate();
 
-  const handleSeriesClick = (id) => {
-    navigate(`/series/${id}`);
+  const handlePodcastClick = (id) => {
+    navigate(`/podcast/${id}`);
   };
 
   const handleSort = (order) => {
@@ -61,7 +61,7 @@ const PodcastList = () => {
   return (
     <div className="p-4 w-full">
       <Navbar onSort={handleSort} />
-      <h2 className="text-2xl font-bold my-4">Featured Casts</h2>
+      <h2 className="text-2xl font-bold my-4">Featured Podcasts</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {loading ? (
           <div>Loading...</div>
@@ -72,7 +72,7 @@ const PodcastList = () => {
             <div
               key={podcast.id}
               className="bg-white text-black rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
-              onClick={() => handleSeriesClick(podcast.id)}
+              onClick={() => handlePodcastClick(podcast.id)}
             >
               <img
                 src={podcast.image}
@@ -88,7 +88,7 @@ const PodcastList = () => {
               </p>
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent navigation when clicking the button
+                  e.stopPropagation();
                   handleFavoriteClick(podcast);
                 }}
                 className="text-2xl mt-2"
