@@ -113,7 +113,7 @@ const SeriesDetail = () => {
                 </option>
               ))}
             </select>
-            <span className="ml-4 text-gray-600">
+            <span className="ml-4 text-gray-300">
               Episodes: {seasonEpisodesCount[selectedSeason]}
             </span>
           </div>
