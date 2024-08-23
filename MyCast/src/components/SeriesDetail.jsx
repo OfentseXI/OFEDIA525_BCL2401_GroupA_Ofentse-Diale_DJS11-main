@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import { getGenreNameById } from "./Genres";
 
 const SeriesDetail = () => {
   const { id } = useParams();
@@ -64,7 +65,7 @@ const SeriesDetail = () => {
       />
       <p className="text-lg mb-4">{series.description}</p>
       <p className="text-sm mb-2">Last updated: {todayDate}</p>
-      <p className="text-sm mb-4">Genre: {getGenresFromIds(podcast.genres).join(', ')}</p> 
+      <p className="text-sm mb-4">Genre: {getGenreNameById(series.genres).join(', ')}</p> 
       <div className="flex items-center">
         <button onClick={handleFavoriteClick} className="text-2xl">
           <FaHeart className={isFavorite ? "text-red-500" : "text-gray-500"} />
