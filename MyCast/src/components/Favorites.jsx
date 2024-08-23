@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 
 const Favorites = () => {
   const [favoritePodcasts, setFavoritePodcasts] = useState([]);
@@ -25,9 +26,21 @@ const Favorites = () => {
     setFavoritePodcasts([]); // Clear the state as well
   };
 
+  const handleSort = (order) => {
+    const sortedPodcasts = [...podcasts].sort((a, b) => {
+      if (order === "asc") {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+    setPodcasts(sortedPodcasts);
+  };
+
   return (
     <div className="p-4 w-full">
-      <div className="flex justify-between items-center mb-4">
+      <Navbar onSort={handleSort}/>
+      <div className="flex justify-between items-center my-4">
         <h2 className="text-2xl font-bold">My Favorite Podcasts</h2>
         {favoritePodcasts.length > 0 && (
           <button
@@ -38,7 +51,7 @@ const Favorites = () => {
           </button>
         )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 m">
         {favoritePodcasts.length > 0 ? (
           favoritePodcasts.map((podcast) => (
             <div
@@ -59,12 +72,25 @@ const Favorites = () => {
                 Seasons: {podcast.seasons}
               </p>
             </div>
+            
           ))
         ) : (
           <p>No favorite podcasts found.</p>
         )}
       </div>
+      <div className="flex justify-between items-center my-4">
+      <h2 className="text-2xl font-bold">My Favorite Episodes</h2>
+        {favoritePodcasts.length > 0 && (
+          <button
+            onClick={clearFavorites}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+          >
+            Clear Favorites
+          </button>
+        )}
+      </div>
     </div>
+    
   );
 };
 

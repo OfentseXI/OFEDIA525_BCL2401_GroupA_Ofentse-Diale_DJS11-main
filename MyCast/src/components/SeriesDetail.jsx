@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import Navbar from './Navbar';
 
 const SeriesDetail = () => {
   const { id } = useParams();
@@ -79,6 +80,7 @@ const SeriesDetail = () => {
 
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <Navbar />
       <h1 className="text-4xl font-bold mb-6 text-gray-900">{podcast.title}</h1>
       
       <div className="flex flex-col md:flex-row mb-8">
