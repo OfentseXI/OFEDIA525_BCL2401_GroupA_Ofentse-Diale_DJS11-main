@@ -64,7 +64,7 @@ const SeriesDetail = () => {
       />
       <p className="text-lg mb-4">{series.description}</p>
       <p className="text-sm mb-2">Last updated: {todayDate}</p>
-      <p className="text-sm mb-4">Genre: {series.genres}</p> 
+      <p className="text-sm mb-4">Genre: {getGenresFromIds(podcast.genres).join(', ')}</p> 
       <div className="flex items-center">
         <button onClick={handleFavoriteClick} className="text-2xl">
           <FaHeart className={isFavorite ? "text-red-500" : "text-gray-500"} />

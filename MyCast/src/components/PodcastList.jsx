@@ -4,7 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import Navbar from "./Navbar";
 
 const PodcastList = () => {
-  const [ setGenres ] = useState({})
+  const [ setGenres] = useState({});
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,6 +55,7 @@ const PodcastList = () => {
         console.error('Error fetching genres:', error);
       }
     };
+
     fetchGenres();
   },);
 
