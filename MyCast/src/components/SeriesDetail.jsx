@@ -63,7 +63,7 @@ const SeriesDetail = () => {
   };
 
   useEffect(() => {
-    console.log('Updated Liked Episodes:', likedEpisodes);
+    localStorage.setItem('likedEpisodes', JSON.stringify(likedEpisodes));
   }, [likedEpisodes]);
 
   if (isLoading) {

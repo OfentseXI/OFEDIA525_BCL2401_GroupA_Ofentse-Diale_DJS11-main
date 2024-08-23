@@ -4,17 +4,22 @@ import Navbar from "./Navbar";
 
 const Favorites = () => {
   const [favoritePodcasts, setFavoritePodcasts] = useState([]);
+  const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     const allPodcasts = JSON.parse(localStorage.getItem("allPodcasts")) || [];
+    const savedLikedEpisodes = JSON.parse(localStorage.getItem("likedEpisodes")) || [];
 
     // Filter podcasts that are in the favorites
     const favoritePodcasts = allPodcasts.filter((podcast) =>
       savedFavorites.includes(podcast.id)
     );
     setFavoritePodcasts(favoritePodcasts);
+
+    // Set favorite episodes
+    setFavoriteEpisodes(savedLikedEpisodes);
   }, []);
 
   const handlePodcastClick = (id) => {
@@ -23,18 +28,20 @@ const Favorites = () => {
 
   const clearFavorites = () => {
     localStorage.removeItem("favorites");
+    localStorage.removeItem("likedEpisodes");
     setFavoritePodcasts([]); // Clear the state as well
+    setFavoriteEpisodes([]); // Clear the episodes
   };
 
   const handleSort = (order) => {
-    const sortedPodcasts = [...podcasts].sort((a, b) => {
+    const sortedPodcasts = [...favoritePodcasts].sort((a, b) => {
       if (order === "asc") {
         return a.title.localeCompare(b.title);
       } else {
         return b.title.localeCompare(a.title);
       }
     });
-    setPodcasts(sortedPodcasts);
+    setFavoritePodcasts(sortedPodcasts);
   };
 
   return (
@@ -51,7 +58,7 @@ const Favorites = () => {
           </button>
         )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 m">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
         {favoritePodcasts.length > 0 ? (
           favoritePodcasts.map((podcast) => (
             <div
@@ -72,15 +79,15 @@ const Favorites = () => {
                 Seasons: {podcast.seasons}
               </p>
             </div>
-            
           ))
         ) : (
           <p>No favorite podcasts found.</p>
         )}
       </div>
+
       <div className="flex justify-between items-center my-4">
-      <h2 className="text-2xl font-bold">My Favorite Episodes</h2>
-        {favoritePodcasts.length > 0 && (
+        <h2 className="text-2xl font-bold">My Favorite Episodes</h2>
+        {favoriteEpisodes.length > 0 && (
           <button
             onClick={clearFavorites}
             className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300"
@@ -89,8 +96,28 @@ const Favorites = () => {
           </button>
         )}
       </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {favoriteEpisodes.length > 0 ? (
+          favoriteEpisodes.map((episode) => (
+            <div
+              key={episode.id}
+              className="bg-white text-black rounded-lg shadow-md p-4"
+            >
+              <h3 className="text-lg font-bold">{episode.title}</h3>
+              <p className="text-sm text-gray-700 mb-2">
+                {episode.description}
+              </p>
+              <audio controls src={episode.file} className="w-full"></audio>
+              <p className="text-xs text-gray-500 mt-2">
+                Season {episode.season}, Podcast ID: {episode.podcastId}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No favorite episodes found.</p>
+        )}
+      </div>
     </div>
-    
   );
 };
 
